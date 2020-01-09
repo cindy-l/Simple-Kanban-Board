@@ -1,0 +1,40 @@
+.BoardContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.Boards {
+  width: 300px;
+  height: 400px;
+  float: left;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  overflow-y: scroll;
+}
+
+.NewBoard {
+  margin: 10px;
+  align-items: center;
+}
+
+.NewBoardInput {
+  text-align: center;
+  padding: 5px;
+  margin: 20px;
+  width: 200px;
+  height: 20px;
+  font-size: 16px;
+  border: 2px solid black;
+  border-radius: 30px;
+}
+
+.NewBoardInput:focus {
+  outline: none;
+}
+
+.AddIcon:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,13 @@
+.BoardHeader {
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 5px;
+  width: 250px;
+  overflow-wrap: break-word;
+}
+
+.DeleteIcon:hover {
+  cursor: pointer;
+}
