@@ -11,16 +11,16 @@ class CardContainer extends Component {
     this.state = {};
   }
 
-  handleAddCard = () => {
-    const cardName = this.state[this.props.boardId];
-    if (!cardName) return;
+  handleAddCard = cardName => {
     this.props.addCard(
       cardName,
       this.props.boards[this.props.boardId].nextCardId,
       this.props.boardId
     );
-    //reset the input value after adding the card
-    this.setState(Object.assign({}, this.state, { [this.props.boardId]: "" }));
+  };
+
+  handleDeleteCard = (cardId, boardId) => {
+    this.props.deleteCard(cardId, boardId);
   };
 
   handleChange = event => {
@@ -31,8 +31,24 @@ class CardContainer extends Component {
 
   handleKeyDown = event => {
     if (event.key === "Enter") {
-      this.handleAddCard();
+      const cardName = this.state[this.props.boardId];
+      if (!cardName) return;
+      this.handleAddCard(cardName);
+      //reset the input value after adding the card
+      this.setState(
+        Object.assign({}, this.state, { [this.props.boardId]: "" })
+      );
     }
+  };
+
+  handleDrop = event => {
+    const cardId = event.dataTransfer.getData("cardId");
+    const cardName = event.dataTransfer.getData("cardName");
+    const sourceBoardId = event.dataTransfer.getData("boardId");
+    if (sourceBoardId === this.props.boardId) return;
+    this.handleAddCard(cardName);
+    this.handleDeleteCard(cardId, sourceBoardId);
+    event.dataTransfer.clearData();
   };
 
   render() {
@@ -42,16 +58,20 @@ class CardContainer extends Component {
           name={this.props.cards[key].cardName}
           key={key}
           id={key}
-          deleteCard={id => this.props.deleteCard(id, this.props.boardId)}
+          boardId={this.props.boardId}
+          addCard={(cardName, cardId, boardId) =>
+            this.handleAddCard(cardName, cardId, boardId)
+          }
+          deleteCard={id => this.handleDeleteCard(id, this.props.boardId)}
         />
       );
     });
 
     return (
-      <div className="CardContainer">
-        <div className="Cards">
+      <div className="CardContainer" onDrop={this.handleDrop}>
+        <div className="Cards" onDragOver={event => event.preventDefault()}>
           {renderCards}
-          <textarea
+          <input
             className="NewCardInput"
             key={this.props.boardId}
             placeholder="Add card"
