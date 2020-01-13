@@ -1,12 +1,14 @@
 .CardContainer {
   overflow: hidden;
   text-align: center;
+  display: flex;
   border: 2px solid black;
   margin: 10px;
   padding: 5px;
-  background-color: lightgrey;
   border-radius: 30px;
   overflow-wrap: break-word;
+  justify-content: center;
+  align-items: center;
 }
 
 .NewCardInput {
@@ -15,7 +17,6 @@
   width: 200px;
   height: 40px;
   font-size: 16px;
-  float: left;
 }
 
 .NewCardInput:focus {

@@ -1,13 +1,10 @@
 .Card {
-  display: flex;
-  flex-direction: row;
   border: 2px solid black;
   margin: 10px;
   padding: 5px;
   font-size: 16px;
-  background-color: white;
   width: 200px;
-  overflow: hidden;
+  background: white;
 }
 
 .CardName {

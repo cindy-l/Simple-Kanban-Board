@@ -1,6 +1,8 @@
-.BoardContainer {
+.BoardContainer{
+  height: 1000px;
   width: 100%;
   overflow: hidden;
+  background: linear-gradient(#C8E1FC, #9BC8FF);
 }
 
 .Boards {
@@ -17,7 +19,6 @@
 
 .NewBoard {
   margin: 10px;
-  align-items: center;
 }
 
 .NewBoardInput {
