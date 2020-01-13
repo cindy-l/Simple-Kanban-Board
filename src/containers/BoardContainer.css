@@ -2,11 +2,11 @@
   height: 1000px;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(#C8E1FC, #9BC8FF);
+  background: linear-gradient(#D5E6FA, #9BC8FF, #9FF6D4,  #B9F9A0 );
 }
 
 .Boards {
-  width: 300px;
+  width: 280px;
   height: 400px;
   float: left;
   flex-direction: column;
@@ -24,8 +24,8 @@
 .NewBoardInput {
   text-align: center;
   padding: 5px;
-  margin: 20px;
-  width: 200px;
+  margin-top: 5px;
+  width: 180px;
   height: 20px;
   font-size: 16px;
   border: 2px solid black;
