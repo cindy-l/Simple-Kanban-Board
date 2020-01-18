@@ -8,7 +8,7 @@ import "./CardContainer.css";
 class CardContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { [this.props.boardId]: "" };
   }
 
   handleAddCard = cardName => {
