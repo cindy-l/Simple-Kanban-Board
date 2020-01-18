@@ -31,7 +31,7 @@ class CardContainer extends Component {
 
   handleKeyDown = event => {
     if (event.key === "Enter") {
-      const cardName = this.state[this.props.boardId];
+      const cardName = this.state[this.props.boardId].trim();
       if (!cardName) return;
       this.handleAddCard(cardName);
       //reset the input value after adding the card

@@ -14,7 +14,7 @@ class BoardContainer extends Component {
   }
 
   handleAddBoard = () => {
-    const boardName = this.state.newBoardInputName;
+    const boardName = this.state.newBoardInputName.trim();
     if (!boardName) return;
     this.props.addBoard(this.props.boards.nextBoardId, boardName);
     //reset input value after adding the board
