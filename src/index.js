@@ -5,6 +5,11 @@ import BoardContainer from "./containers/BoardContainer";
 import store from "./store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
+import { saveState } from "./localStorage.js";
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 ReactDOM.render(
   <Provider store={store}>
