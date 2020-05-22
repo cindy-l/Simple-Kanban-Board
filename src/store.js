@@ -1,14 +1,14 @@
 import { createStore } from "redux";
 import reducer from "./reducers";
 import { loadState } from "./localStorage";
+import { v4 as uuidv4 } from "uuid";
 
-const initialState = {
-  0: { name: "backlog", cards: {}, nextCardId: 0 },
-  1: { name: "todo", cards: {}, nextCardId: 0 },
-  2: { name: "doing", cards: {}, nextCardId: 0 },
-  3: { name: "done", cards: {}, nextCardId: 0 },
-  nextBoardId: 4,
-};
+const initialState = [
+  { id: uuidv4(), name: "backlog", cards: [] },
+  { id: uuidv4(), name: "todo", cards: [] },
+  { id: uuidv4(), name: "doing", cards: [] },
+  { id: uuidv4(), name: "done", cards: [] },
+];
 
 const store = createStore(reducer, loadState() || initialState);
 

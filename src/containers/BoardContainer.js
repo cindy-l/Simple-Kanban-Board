@@ -11,19 +11,15 @@ class BoardContainer extends Component {
   state = { textInput: "" };
 
   handleAddBoard = () => {
-    const {
-      addBoard,
-      boardsInfo: { nextBoardId },
-    } = this.props;
+    const { addBoard } = this.props;
 
     const boardName = this.state.textInput.trim();
 
     if (!boardName) return;
 
-    addBoard(nextBoardId, boardName);
+    addBoard(boardName);
 
-    //reset input value after adding the board
-    this.setState({ textInput: "" });
+    this.setState(Object.assign({}, this.state, { textInput: "" }));
   };
 
   handleKeyDown = (event) => {
@@ -47,27 +43,24 @@ class BoardContainer extends Component {
   );
 
   renderContent = () => {
-    const {
-      boardsInfo: { nextBoardId, ...boardObjects },
-      deleteBoard,
-    } = this.props;
+    const { boards, deleteBoard } = this.props;
 
-    const numOfBoards = Object.keys(boardObjects).length;
+    const numOfBoards = boards.length;
 
-    const boards = Object.keys(boardObjects).map((key) => (
-      <div className="BoardContainer" key={key}>
+    const boardContainers = boards.map((board) => (
+      <div className="BoardContainer" key={board.id}>
         <Board
-          name={boardObjects[key].name}
-          id={key}
+          name={board.name}
+          id={board.id}
           deleteBoard={(id) => deleteBoard(id)}
         />
-        <CardContainer cards={boardObjects[key].cards} boardId={key} />
+        <CardContainer cards={board.cards} boardId={board.id} />
       </div>
     ));
 
     return (
       <div className="App">
-        {numOfBoards !== 0 && boards}
+        {numOfBoards !== 0 && boardContainers}
         {this.renderAddAnotherBoard()}
       </div>
     );
@@ -83,6 +76,6 @@ const mapDispatchToProps = {
   deleteBoard,
 };
 
-const mapStateToProps = (state) => ({ boardsInfo: state });
+const mapStateToProps = (state) => ({ boards: state });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

@@ -9,9 +9,10 @@ class CardContainer extends Component {
   state = { [this.props.boardId]: "" };
 
   handleAddCard = (cardName) => {
-    const { addCard, boardInfo, boardId } = this.props;
-    addCard(cardName, boardInfo[boardId].nextCardId, boardId);
+    const { addCard, boardId } = this.props;
+    addCard(cardName, boardId);
   };
+
   handleDeleteCard = (cardId, boardId) => {
     this.props.deleteCard(cardId, boardId);
   };
@@ -24,11 +25,14 @@ class CardContainer extends Component {
 
   handleKeyDown = (event) => {
     const { boardId } = this.props;
+
     if (event.key === "Enter") {
       const cardName = this.state[boardId].trim();
+
       if (!cardName) return;
+
       this.handleAddCard(cardName);
-      //reset the input value after adding the card
+
       this.setState(Object.assign({}, this.state, { [boardId]: "" }));
     }
   };
@@ -36,20 +40,25 @@ class CardContainer extends Component {
   handleDrop = (event) => {
     const cardId = event.dataTransfer.getData("cardId");
     const cardName = event.dataTransfer.getData("cardName");
+
     const sourceBoardId = event.dataTransfer.getData("boardId");
     if (sourceBoardId === this.props.boardId) return;
+
     this.handleAddCard(cardName);
+
     this.handleDeleteCard(cardId, sourceBoardId);
+
     event.dataTransfer.clearData();
   };
 
   render() {
     const { cards, boardId } = this.props;
-    const renderCards = Object.keys(cards).map((key) => (
+
+    const renderCards = cards.map((card) => (
       <Card
-        name={cards[key].cardName}
-        key={key}
-        id={key}
+        name={card.cardName}
+        key={card.cardId}
+        id={card.cardId}
         boardId={boardId}
         addCard={(cardName, cardId, boardId) =>
           this.handleAddCard(cardName, cardId, boardId)
@@ -77,11 +86,9 @@ class CardContainer extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ boardInfo: state });
-
 const mapDispatchToProps = {
   addCard,
   deleteCard,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardContainer);
+export default connect(null, mapDispatchToProps)(CardContainer);

@@ -1,8 +1,9 @@
 import { ADD_BOARD } from "./ActionTypes";
+import { v4 as uuidv4 } from "uuid";
 
-const addBoard = (boardId, boardName) => ({
+const addBoard = (boardName) => ({
   type: ADD_BOARD,
-  payload: { boardId, boardName },
+  payload: { boardId: uuidv4(), boardName },
 });
 
 export default addBoard;

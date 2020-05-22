@@ -9,32 +9,38 @@ const reducer = (state, action) => {
   switch (action.type) {
     case ADD_CARD: {
       const { cardName, cardId, boardId } = action.payload;
-      const boards = JSON.parse(JSON.stringify(state));
-      boards[boardId].cards[cardId] = { cardName, boardId };
-      boards[boardId].nextCardId++;
-      return boards;
+      return state.map((board) => {
+        if (board.id !== boardId) {
+          return board;
+        }
+        return {
+          ...board,
+          cards: [...board.cards, { cardName, cardId, boardId }],
+        };
+      });
     }
 
     case DELETE_CARD: {
       const { cardId, boardId } = action.payload;
-      const boards = JSON.parse(JSON.stringify(state));
-      delete boards[boardId].cards[cardId];
-      return boards;
+      return state.map((board) => {
+        if (board.id !== boardId) {
+          return board;
+        }
+        return {
+          ...board,
+          cards: board.cards.filter((card) => card.cardId !== cardId),
+        };
+      });
     }
 
     case ADD_BOARD: {
       const { boardId, boardName } = action.payload;
-      const boards = JSON.parse(JSON.stringify(state));
-      boards[boardId] = { name: boardName, cards: {}, nextCardId: 0 };
-      boards.nextBoardId++;
-      return boards;
+      return [...state, { id: boardId, name: boardName, cards: [] }];
     }
 
     case DELETE_BOARD: {
       const { boardId } = action.payload;
-      const boards = JSON.parse(JSON.stringify(state));
-      delete boards[boardId];
-      return boards;
+      return state.filter((board) => board.id !== boardId);
     }
 
     default:
