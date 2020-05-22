@@ -32,21 +32,19 @@ class BoardContainer extends Component {
     }
   };
 
-  renderAddAnotherBoard = () => {
-    return (
-      <div className="NewBoard">
-        <input
-          className="NewBoardInput"
-          type="text"
-          placeholder="Create new board"
-          value={this.state.textInput}
-          onChange={(event) => this.setState({ textInput: event.target.value })}
-          onKeyDown={this.handleKeyDown}
-        />
-        <AddIcon className="AddIcon" onClick={this.handleAddBoard} />
-      </div>
-    );
-  };
+  renderAddAnotherBoard = () => (
+    <div className="NewBoard">
+      <input
+        className="NewBoardInput"
+        type="text"
+        placeholder="Create new board"
+        value={this.state.textInput}
+        onChange={(event) => this.setState({ textInput: event.target.value })}
+        onKeyDown={this.handleKeyDown}
+      />
+      <AddIcon className="AddIcon" onClick={this.handleAddBoard} />
+    </div>
+  );
 
   renderContent = () => {
     const {
@@ -85,8 +83,6 @@ const mapDispatchToProps = {
   deleteBoard,
 };
 
-const mapStateToProps = (state) => {
-  return { boardsInfo: state };
-};
+const mapStateToProps = (state) => ({ boardsInfo: state });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);

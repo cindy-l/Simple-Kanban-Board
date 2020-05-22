@@ -45,20 +45,18 @@ class CardContainer extends Component {
 
   render() {
     const { cards, boardId } = this.props;
-    const renderCards = Object.keys(cards).map((key) => {
-      return (
-        <Card
-          name={cards[key].cardName}
-          key={key}
-          id={key}
-          boardId={boardId}
-          addCard={(cardName, cardId, boardId) =>
-            this.handleAddCard(cardName, cardId, boardId)
-          }
-          deleteCard={(id) => this.handleDeleteCard(id, boardId)}
-        />
-      );
-    });
+    const renderCards = Object.keys(cards).map((key) => (
+      <Card
+        name={cards[key].cardName}
+        key={key}
+        id={key}
+        boardId={boardId}
+        addCard={(cardName, cardId, boardId) =>
+          this.handleAddCard(cardName, cardId, boardId)
+        }
+        deleteCard={(id) => this.handleDeleteCard(id, boardId)}
+      />
+    ));
 
     return (
       <div className="CardContainer" onDrop={this.handleDrop}>
@@ -79,9 +77,7 @@ class CardContainer extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { boardInfo: state };
-};
+const mapStateToProps = (state) => ({ boardInfo: state });
 
 const mapDispatchToProps = {
   addCard,
