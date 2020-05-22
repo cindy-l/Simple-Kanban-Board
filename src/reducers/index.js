@@ -2,7 +2,7 @@ import {
   ADD_CARD,
   DELETE_CARD,
   ADD_BOARD,
-  DELETE_BOARD
+  DELETE_BOARD,
 } from "../actions/ActionTypes";
 
 const reducer = (state, action) => {

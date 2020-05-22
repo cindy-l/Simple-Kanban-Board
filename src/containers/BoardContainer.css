@@ -1,11 +1,11 @@
-.BoardContainer{
+.App {
   height: 1000px;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(#D5E6FA, #9BC8FF, #9FF6D4,  #B9F9A0 );
+  background: linear-gradient(#d5e6fa, #9bc8ff, #9ff6d4, #b9f9a0);
 }
 
-.Boards {
+.BoardContainer {
   width: 280px;
   height: 400px;
   float: left;

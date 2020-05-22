@@ -1,37 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 import DeleteIcon from "@material-ui/icons/DeleteRounded";
 import "./Card.css";
 
-class Card extends Component {
-  handleDragStart = (event, cardId, cardName, boardId) => {
+const Card = ({ name, id, boardId, deleteCard }) => {
+  const handleDragStart = (event, cardId, cardName, boardId) => {
     event.dataTransfer.setData("cardId", cardId);
     event.dataTransfer.setData("cardName", cardName);
     event.dataTransfer.setData("boardId", boardId);
   };
 
-  render() {
-    return (
-      <div
-        className="Card"
-        draggable="true"
-        onDragStart={event =>
-          this.handleDragStart(
-            event,
-            this.props.id,
-            this.props.name,
-            this.props.boardId
-          )
-        }
-        onDragOver={event => event.preventDefault()}
-      >
-        <div className="CardName">{this.props.name}</div>
-        <DeleteIcon
-          className="DeleteIcon"
-          onClick={() => this.props.deleteCard(this.props.id)}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className="Card"
+      draggable="true"
+      onDragStart={(event) => handleDragStart(event, id, name, boardId)}
+      onDragOver={(event) => event.preventDefault()}
+    >
+      <div className="CardName">{name}</div>
+      <DeleteIcon className="DeleteIcon" onClick={() => deleteCard(id)} />
+    </div>
+  );
+};
 
 export default Card;

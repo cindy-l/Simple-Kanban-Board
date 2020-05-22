@@ -2,15 +2,12 @@ import React from "react";
 import "./Board.css";
 import DeleteIcon from "@material-ui/icons/DeleteRounded";
 
-const Board = props => {
+const Board = ({ name, id, deleteBoard }) => {
   return (
     <div className="Board">
       <header className="BoardHeader">
-        {props.name}
-        <DeleteIcon
-          className="DeleteIcon"
-          onClick={() => props.deleteBoard(props.id)}
-        />
+        {name}
+        <DeleteIcon className="DeleteIcon" onClick={() => deleteBoard(id)} />
       </header>
     </div>
   );

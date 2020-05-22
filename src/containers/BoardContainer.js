@@ -8,24 +8,25 @@ import AddIcon from "@material-ui/icons/AddRounded";
 import "./BoardContainer.css";
 
 class BoardContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { newBoardInputName: "" };
-  }
+  state = { textInput: "" };
 
   handleAddBoard = () => {
-    const boardName = this.state.newBoardInputName.trim();
+    const {
+      addBoard,
+      boardsInfo: { nextBoardId },
+    } = this.props;
+
+    const boardName = this.state.textInput.trim();
+
     if (!boardName) return;
-    this.props.addBoard(this.props.boards.nextBoardId, boardName);
+
+    addBoard(nextBoardId, boardName);
+
     //reset input value after adding the board
-    this.setState({ newBoardInputName: "" });
+    this.setState({ textInput: "" });
   };
 
-  handleChange = event => {
-    this.setState({ newBoardInputName: event.target.value });
-  };
-
-  handleKeyDown = event => {
+  handleKeyDown = (event) => {
     if (event.key === "Enter") {
       this.handleAddBoard();
     }
@@ -38,8 +39,8 @@ class BoardContainer extends Component {
           className="NewBoardInput"
           type="text"
           placeholder="Create new board"
-          value={this.state.newBoardInputName}
-          onChange={this.handleChange}
+          value={this.state.textInput}
+          onChange={(event) => this.setState({ textInput: event.target.value })}
           onKeyDown={this.handleKeyDown}
         />
         <AddIcon className="AddIcon" onClick={this.handleAddBoard} />
@@ -48,30 +49,30 @@ class BoardContainer extends Component {
   };
 
   renderContent = () => {
-    const numOfBoards = Object.keys(this.props.boards).length;
+    const {
+      boardsInfo: { nextBoardId, ...boardObjects },
+      deleteBoard,
+    } = this.props;
 
-    if (numOfBoards === 0) {
-      return <div className="EmptyBoard">{this.renderAddAnotherBoard()}</div>;
-    } else {
-      const boards = Object.keys(this.props.boards)
-        .filter(key => key !== "nextBoardId")
-        .map(key => (
-          <div className="Boards" key={key}>
-            <Board
-              name={this.props.boards[key].name}
-              id={key}
-              deleteBoard={id => this.props.deleteBoard(id)}
-            />
-            <CardContainer cards={this.props.boards[key].cards} boardId={key} />
-          </div>
-        ));
-      return (
-        <div className="BoardContainer">
-          {boards}
-          {this.renderAddAnotherBoard()}
-        </div>
-      );
-    }
+    const numOfBoards = Object.keys(boardObjects).length;
+
+    const boards = Object.keys(boardObjects).map((key) => (
+      <div className="BoardContainer" key={key}>
+        <Board
+          name={boardObjects[key].name}
+          id={key}
+          deleteBoard={(id) => deleteBoard(id)}
+        />
+        <CardContainer cards={boardObjects[key].cards} boardId={key} />
+      </div>
+    ));
+
+    return (
+      <div className="App">
+        {numOfBoards !== 0 && boards}
+        {this.renderAddAnotherBoard()}
+      </div>
+    );
   };
 
   render() {
@@ -81,11 +82,11 @@ class BoardContainer extends Component {
 
 const mapDispatchToProps = {
   addBoard,
-  deleteBoard
+  deleteBoard,
 };
 
-const mapStateToProps = state => {
-  return { boards: state };
+const mapStateToProps = (state) => {
+  return { boardsInfo: state };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);
