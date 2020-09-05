@@ -1,25 +1,42 @@
-import React from "react";
-import DeleteIcon from "@material-ui/icons/DeleteRounded";
-import "./Card.css";
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import "../styles/CardContainer.css";
 
-const Card = ({ name, id, boardId, deleteCard }) => {
-  const handleDragStart = (event, cardId, cardName, boardId) => {
+class Card extends PureComponent {
+  static propTypes = {
+    cardName: PropTypes.string.isRequired,
+    cardId: PropTypes.string.isRequired,
+    boardId: PropTypes.string.isRequired,
+    deleteCard: PropTypes.func.isRequired,
+  };
+
+  handleDragStart = (event) => {
+    const { cardId, cardName, boardId } = this.props;
     event.dataTransfer.setData("cardId", cardId);
     event.dataTransfer.setData("cardName", cardName);
     event.dataTransfer.setData("boardId", boardId);
   };
 
-  return (
-    <div
-      className="Card"
-      draggable="true"
-      onDragStart={(event) => handleDragStart(event, id, name, boardId)}
-      onDragOver={(event) => event.preventDefault()}
-    >
-      <div className="CardName">{name}</div>
-      <DeleteIcon className="DeleteIcon" onClick={() => deleteCard(id)} />
-    </div>
-  );
-};
+  render() {
+    const { cardName, cardId, boardId, deleteCard } = this.props;
+
+    return (
+      <div
+        className="card"
+        draggable="true"
+        onDragStart={(event) => this.handleDragStart(event)}
+        onDragOver={(event) => event.preventDefault()}
+      >
+        <div className="card-name">{cardName}</div>
+        <button
+          className="mdc-icon-button material-icons icon-button"
+          onClick={() => deleteCard(cardId)}
+        >
+          delete
+        </button>
+      </div>
+    );
+  }
+}
 
 export default Card;

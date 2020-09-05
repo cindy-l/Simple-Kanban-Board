@@ -1,20 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import BoardContainer from "./containers/BoardContainer";
-import store from "./store";
-import { Provider } from "react-redux";
-import * as serviceWorker from "./serviceWorker";
-import { saveState } from "./localStorage.js";
+import configureStore from "./configureStore";
+import Root from "./components/Root";
 
-store.subscribe(() => {
-  saveState(store.getState());
-});
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BoardContainer />
-  </Provider>,
+  <Root store={configureStore()} />,
   document.getElementById("root")
 );
 

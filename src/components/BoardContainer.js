@@ -1,13 +1,28 @@
-import React, { Component } from "react";
-import Board from "../components/Board";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import addBoard from "../actions/AddBoard";
-import deleteBoard from "../actions/DeleteBoard";
+import Board from "./Board";
+import PropTypes from "prop-types";
+import { addBoard, deleteBoard } from "../actions";
 import CardContainer from "./CardContainer";
-import AddIcon from "@material-ui/icons/AddRounded";
-import "./BoardContainer.css";
+import "../styles/BoardContainer.css";
 
-class BoardContainer extends Component {
+class BoardContainer extends PureComponent {
+  static propTypes = {
+    boards: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        cards: PropTypes.arrayOf(
+          PropTypes.shape({
+            cardId: PropTypes.string,
+            cardName: PropTypes.string,
+            boardId: PropTypes.string,
+          })
+        ),
+      })
+    ).isRequired,
+  };
+
   state = { textInput: "" };
 
   handleAddBoard = () => {
@@ -19,7 +34,7 @@ class BoardContainer extends Component {
 
     addBoard(boardName);
 
-    this.setState(Object.assign({}, this.state, { textInput: "" }));
+    this.setState({ textInput: "" });
   };
 
   handleKeyDown = (event) => {
@@ -29,16 +44,21 @@ class BoardContainer extends Component {
   };
 
   renderAddAnotherBoard = () => (
-    <div className="NewBoard">
-      <input
-        className="NewBoardInput"
+    <div className="board-container">
+      <textarea
+        className="new-board-input"
         type="text"
         placeholder="Create new board"
         value={this.state.textInput}
         onChange={(event) => this.setState({ textInput: event.target.value })}
         onKeyDown={this.handleKeyDown}
       />
-      <AddIcon className="AddIcon" onClick={this.handleAddBoard} />
+      <button
+        className="mdc-icon-button material-icons icon-button"
+        onClick={this.handleAddBoard}
+      >
+        add
+      </button>
     </div>
   );
 
@@ -48,7 +68,7 @@ class BoardContainer extends Component {
     const numOfBoards = boards.length;
 
     const boardContainers = boards.map((board) => (
-      <div className="BoardContainer" key={board.id}>
+      <div className="board-container" key={board.id}>
         <Board
           name={board.name}
           id={board.id}
@@ -59,7 +79,7 @@ class BoardContainer extends Component {
     ));
 
     return (
-      <div className="App">
+      <div>
         {numOfBoards !== 0 && boardContainers}
         {this.renderAddAnotherBoard()}
       </div>

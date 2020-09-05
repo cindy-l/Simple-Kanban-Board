@@ -1,12 +1,23 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import addCard from "../actions/AddCard";
-import deleteCard from "../actions/DeleteCard";
+import PropTypes from "prop-types";
+import { addCard, deleteCard } from "../actions";
 import Card from "../components/Card";
-import "./CardContainer.css";
+import "../styles/CardContainer.css";
 
-class CardContainer extends Component {
+class CardContainer extends PureComponent {
   state = { [this.props.boardId]: "" };
+
+  static propTypes = {
+    cards: PropTypes.arrayOf(
+      PropTypes.shape({
+        cardId: PropTypes.string,
+        cardName: PropTypes.string,
+        boardId: PropTypes.string,
+      })
+    ).isRequired,
+    boardId: PropTypes.string.isRequired,
+  };
 
   handleAddCard = (cardName) => {
     const { addCard, boardId } = this.props;
@@ -17,11 +28,8 @@ class CardContainer extends Component {
     this.props.deleteCard(cardId, boardId);
   };
 
-  handleChange = (event) => {
-    this.setState(
-      Object.assign({}, this.state, { [event.target.name]: event.target.value })
-    );
-  };
+  handleChange = (event) =>
+    this.setState({ [event.target.name]: event.target.value });
 
   handleKeyDown = (event) => {
     const { boardId } = this.props;
@@ -33,7 +41,7 @@ class CardContainer extends Component {
 
       this.handleAddCard(cardName);
 
-      this.setState(Object.assign({}, this.state, { [boardId]: "" }));
+      this.setState({ [boardId]: "" });
     }
   };
 
@@ -56,23 +64,20 @@ class CardContainer extends Component {
 
     const renderCards = cards.map((card) => (
       <Card
-        name={card.cardName}
+        {...card}
         key={card.cardId}
-        id={card.cardId}
         boardId={boardId}
-        addCard={(cardName, cardId, boardId) =>
-          this.handleAddCard(cardName, cardId, boardId)
-        }
+        addCard={(cardName) => this.handleAddCard(cardName)}
         deleteCard={(id) => this.handleDeleteCard(id, boardId)}
       />
     ));
 
     return (
-      <div className="CardContainer" onDrop={this.handleDrop}>
-        <div className="Cards" onDragOver={(event) => event.preventDefault()}>
+      <div className="card-container" onDrop={this.handleDrop}>
+        <div className="cards" onDragOver={(event) => event.preventDefault()}>
           {renderCards}
           <input
-            className="NewCardInput"
+            className="card"
             key={boardId}
             placeholder="Add card"
             name={boardId}

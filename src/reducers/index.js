@@ -1,9 +1,4 @@
-import {
-  ADD_CARD,
-  DELETE_CARD,
-  ADD_BOARD,
-  DELETE_BOARD,
-} from "../actions/ActionTypes";
+import { ADD_CARD, DELETE_CARD, ADD_BOARD, DELETE_BOARD } from "../actions";
 
 const reducer = (state, action) => {
   switch (action.type) {
