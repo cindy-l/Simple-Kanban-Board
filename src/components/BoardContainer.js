@@ -4,6 +4,7 @@ import Board from "./Board";
 import PropTypes from "prop-types";
 import { addBoard, deleteBoard } from "../actions";
 import CardContainer from "./CardContainer";
+
 import "../styles/BoardContainer.css";
 
 class BoardContainer extends PureComponent {

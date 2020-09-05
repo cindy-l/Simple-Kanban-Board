@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+
 import "../styles/CardContainer.css";
 
 class Card extends PureComponent {
@@ -18,7 +19,7 @@ class Card extends PureComponent {
   };
 
   render() {
-    const { cardName, cardId, boardId, deleteCard } = this.props;
+    const { cardName, cardId, deleteCard } = this.props;
 
     return (
       <div
