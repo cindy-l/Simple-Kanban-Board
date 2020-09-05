@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import configureStore from "./configureStore";
 import Root from "./components/Root";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 
 import * as serviceWorker from "./serviceWorker";
 

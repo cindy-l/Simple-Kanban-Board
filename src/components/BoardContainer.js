@@ -1,9 +1,12 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import Board from "./Board";
 import PropTypes from "prop-types";
-import { addBoard, deleteBoard } from "../actions";
+import { addBoard, deleteBoard, editBoard } from "../actions";
 import CardContainer from "./CardContainer";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import RenameBoardModal from "./RenameBoardModal";
 
 import "../styles/BoardContainer.css";
 
@@ -22,9 +25,12 @@ class BoardContainer extends PureComponent {
         ),
       })
     ).isRequired,
+    addBoard: PropTypes.func.isRequired,
+    deleteBoard: PropTypes.func.isRequired,
+    editBoard: PropTypes.func.isRequired,
   };
 
-  state = { textInput: "" };
+  state = { textInput: "", show: false };
 
   handleAddBoard = () => {
     const { addBoard } = this.props;
@@ -38,63 +44,94 @@ class BoardContainer extends PureComponent {
     this.setState({ textInput: "" });
   };
 
-  handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      this.handleAddBoard();
-    }
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.handleAddBoard();
+  };
+
+  closeModal = () => {
+    this.setState({ show: false });
   };
 
   renderAddAnotherBoard = () => (
-    <div className="board-container">
-      <textarea
-        className="new-board-input"
-        type="text"
-        placeholder="Create new board"
-        value={this.state.textInput}
-        onChange={(event) => this.setState({ textInput: event.target.value })}
-        onKeyDown={this.handleKeyDown}
-      />
-      <button
-        className="mdc-icon-button material-icons icon-button"
-        onClick={this.handleAddBoard}
-      >
-        add
-      </button>
-    </div>
+    <Col md={2} className="board">
+      <Row className="board-header">
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group>
+            <Form.Label className="board-name">Add new board</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Add new board"
+              onChange={(event) =>
+                this.setState({ textInput: event.target.value })
+              }
+              value={this.state.textInput}
+            />
+          </Form.Group>
+        </Form>
+      </Row>
+    </Col>
   );
 
   renderContent = () => {
-    const { boards, deleteBoard } = this.props;
-
-    const numOfBoards = boards.length;
+    const { boards, deleteBoard, editBoard } = this.props;
 
     const boardContainers = boards.map((board) => (
-      <div className="board-container" key={board.id}>
-        <Board
-          name={board.name}
-          id={board.id}
-          deleteBoard={(id) => deleteBoard(id)}
-        />
+      <Col md={2} className="board" key={board.id}>
+        <Row className="board-header">
+          <Col md={9}>
+            <p className="board-name">{board.name}</p>
+          </Col>
+          <Col md={1}>
+            <button
+              className="mdc-icon-button material-icons icon-button"
+              onClick={() =>
+                this.setState({
+                  show: true,
+                  editBoardId: board.id,
+                  editBoardName: board.name,
+                })
+              }
+            >
+              edit
+            </button>
+          </Col>
+        </Row>
         <CardContainer cards={board.cards} boardId={board.id} />
-      </div>
+      </Col>
     ));
 
     return (
-      <div>
-        {numOfBoards !== 0 && boardContainers}
+      <Row>
+        {boardContainers}
         {this.renderAddAnotherBoard()}
-      </div>
+        <RenameBoardModal
+          name={this.state.editBoardName}
+          id={this.state.editBoardId}
+          show={this.state.show}
+          onHide={this.closeModal}
+          onSave={(id, newName) => {
+            editBoard(id, newName);
+            this.closeModal();
+          }}
+          onDelete={() => {
+            deleteBoard(this.state.editBoardId);
+            this.closeModal();
+          }}
+        />
+      </Row>
     );
   };
 
   render() {
-    return <React.Fragment>{this.renderContent()}</React.Fragment>;
+    return <div className="board-content">{this.renderContent()}</div>;
   }
 }
 
 const mapDispatchToProps = {
   addBoard,
   deleteBoard,
+  editBoard,
 };
 
 const mapStateToProps = (state) => ({ boards: state });

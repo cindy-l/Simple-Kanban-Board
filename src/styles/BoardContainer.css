@@ -1,26 +1,22 @@
-.board-container {
-  height: 100vh;
-  width: 250px;
-  float: left;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  overflow-y: scroll;
+.board-content {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.board {
+  padding: 1rem;
 }
 
 .board-header {
-  font-size: 3rem;
+  font-size: 2rem;
   margin: auto;
   padding: 10px;
-  width: 90%;
-  text-align: center;
-  overflow-wrap: break-word;
 }
 
-.new-board-input {
-  text-align: center;
-  padding: 0.25rem;
-  margin-top: 3rem;
-  border-radius: 30px;
+.board-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .icon-button {

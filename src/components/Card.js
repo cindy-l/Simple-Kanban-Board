@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 import "../styles/CardContainer.css";
 
@@ -11,11 +13,19 @@ class Card extends PureComponent {
     deleteCard: PropTypes.func.isRequired,
   };
 
+  state = {
+    show: false,
+  };
+
   handleDragStart = (event) => {
     const { cardId, cardName, boardId } = this.props;
     event.dataTransfer.setData("cardId", cardId);
     event.dataTransfer.setData("cardName", cardName);
     event.dataTransfer.setData("boardId", boardId);
+  };
+
+  closeModal = () => {
+    this.setState({ show: false });
   };
 
   render() {
@@ -29,12 +39,24 @@ class Card extends PureComponent {
         onDragOver={(event) => event.preventDefault()}
       >
         <div className="card-name">{cardName}</div>
-        <button
-          className="mdc-icon-button material-icons icon-button"
-          onClick={() => deleteCard(cardId)}
-        >
-          delete
+        <button variant="primary" onClick={() => this.setState({ show: true })}>
+          edit
         </button>
+
+        <Modal show={this.state.show} onHide={this.closeModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.closeModal}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={this.closeModal}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
