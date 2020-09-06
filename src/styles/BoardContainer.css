@@ -5,6 +5,7 @@
 
 .board {
   padding: 1rem;
+  width: 100%;
 }
 
 .board-header {
@@ -13,18 +14,18 @@
   padding: 10px;
 }
 
-.board-name {
+.ellipsis-text {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.icon-button {
+.custom-button {
   background: none;
   border: none;
   color: inherit;
 }
 
-.icon-button:hover {
+.custom-button:hover {
   cursor: pointer;
 }

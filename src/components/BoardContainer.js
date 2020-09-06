@@ -80,11 +80,11 @@ class BoardContainer extends PureComponent {
       <Col md={2} className="board" key={board.id}>
         <Row className="board-header">
           <Col md={9}>
-            <p className="board-name">{board.name}</p>
+            <p className="ellipsis-text">{board.name}</p>
           </Col>
           <Col md={1}>
             <button
-              className="mdc-icon-button material-icons icon-button"
+              className="mdc-icon-button material-icons custom-button"
               onClick={() =>
                 this.setState({
                   show: true,

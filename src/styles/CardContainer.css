@@ -11,9 +11,3 @@
   background: white;
   overflow: hidden;
 }
-
-.card-name {
-  float: left;
-  margin: 0.125rem;
-  width: 150px;
-}

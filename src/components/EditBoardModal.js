@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
-class RenameBoardModal extends PureComponent {
+class EditBoardModal extends PureComponent {
   static propTypes = {
     show: PropTypes.bool.isRequired,
     onDelete: PropTypes.func.isRequired,
@@ -15,7 +15,9 @@ class RenameBoardModal extends PureComponent {
   state = { textInput: "" };
 
   render() {
-    const { show, onHide, onSave, onDelete, name, id } = this.props;
+    const { show, onHide, onSave, onDelete, board } = this.props;
+    const { name, id } = board;
+
     return (
       <Modal show={show} onHide={onHide}>
         <Modal.Header>
@@ -50,7 +52,7 @@ class RenameBoardModal extends PureComponent {
               <Form.Label>Rename board</Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={name}
+                value={name}
                 onChange={(event) =>
                   this.setState({ textInput: event.target.value })
                 }
@@ -63,4 +65,4 @@ class RenameBoardModal extends PureComponent {
   }
 }
 
-export default RenameBoardModal;
+export default EditBoardModal;

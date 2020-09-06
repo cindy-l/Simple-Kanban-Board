@@ -38,7 +38,7 @@ class Card extends PureComponent {
         onDragStart={(event) => this.handleDragStart(event)}
         onDragOver={(event) => event.preventDefault()}
       >
-        <div className="card-name">{cardName}</div>
+        <div className="ellipsis-text">{cardName}</div>
         <button variant="primary" onClick={() => this.setState({ show: true })}>
           edit
         </button>
