@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 
 class EditCardModal extends PureComponent {
   static propTypes = {
-    cardId: PropTypes.string.isRequired,
     editCardNameInput: PropTypes.string,
     editCardDueDateInput: PropTypes.string,
     show: PropTypes.bool.isRequired,
@@ -19,7 +18,6 @@ class EditCardModal extends PureComponent {
 
   render() {
     const {
-      cardId,
       editCardNameInput,
       editCardDueDateInput,
       show,
@@ -60,7 +58,7 @@ class EditCardModal extends PureComponent {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(event) => event.preventDefault()}>
-            <Form.Group controlId={cardId}>
+            <Form.Group controlId="card-name-form">
               <Form.Label>Edit task</Form.Label>
               <Form.Control
                 type="text"
@@ -69,7 +67,7 @@ class EditCardModal extends PureComponent {
                 value={editCardNameInput}
               />
             </Form.Group>
-            <Form.Group controlId={cardId}>
+            <Form.Group controlId="card-due-date-form">
               <Form.Label>Due Date</Form.Label>
               <Form.Control
                 type="text"

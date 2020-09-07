@@ -29,7 +29,7 @@ export default KanbanCard;
 KanbanCard.propTypes = {
   text: PropTypes.string,
   handleClick: PropTypes.func.isRequired,
-  handleDragEnter: PropTypes.func.isRequired,
-  handleDragStart: PropTypes.func.isRequired,
-  handleDrop: PropTypes.func.isRequired,
+  handleDragEnter: PropTypes.func,
+  handleDragStart: PropTypes.func,
+  handleDrop: PropTypes.func,
 };

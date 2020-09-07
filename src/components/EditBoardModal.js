@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 
 class EditBoardModal extends PureComponent {
   static propTypes = {
-    id: PropTypes.string.isRequired,
     editBoardInput: PropTypes.string.isRequired,
     show: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -17,7 +16,6 @@ class EditBoardModal extends PureComponent {
 
   render() {
     const {
-      id,
       editBoardInput,
       show,
       onChange,
@@ -56,7 +54,7 @@ class EditBoardModal extends PureComponent {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(event) => event.preventDefault()}>
-            <Form.Group controlId={id}>
+            <Form.Group controlId="board-name-form">
               <Form.Label>Rename board</Form.Label>
               <Form.Control
                 isInvalid={!editBoardInput}

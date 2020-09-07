@@ -1,6 +1,6 @@
 .kanban-card {
   background: white;
-  border: 2px solid #2471a3;
+  border: none;
   margin: 0.125rem;
   padding: 1.5rem;
   width: 12rem;

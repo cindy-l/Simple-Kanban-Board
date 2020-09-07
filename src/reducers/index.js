@@ -61,19 +61,22 @@ const reducer = (state, action) => {
 
     case EDIT_CARD: {
       const { card: newCard, boardId } = action.payload;
-      const { cardId } = newCard;
 
       const newState = JSON.parse(JSON.stringify(state));
 
       const targetBoard = newState.find((board) => board.id === boardId);
 
-      if (!targetBoard) {
-        targetBoard.cards.map((card) => {
-          if (card.cardId !== cardId) {
-            return card;
-          }
-          return { ...newCard };
-        });
+      if (targetBoard) {
+        const targetCardIndex = targetBoard.cards.findIndex(
+          (card) => card.cardId === newCard.cardId
+        );
+
+        if (targetCardIndex >= 0) {
+          targetBoard.cards[targetCardIndex] = {
+            ...targetBoard.cards[targetCardIndex],
+            ...newCard,
+          };
+        }
       }
 
       return newState;

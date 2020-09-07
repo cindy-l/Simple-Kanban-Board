@@ -122,7 +122,7 @@ const BoardContainer = (props) => {
     <div className="board">
       <Row className="board-header">
         <Form onSubmit={handleSubmit}>
-          <Form.Group>
+          <Form.Group controlId="new-board-form">
             <Form.Label className="board-name">Add new board</Form.Label>
             <Form.Control
               type="text"
@@ -176,7 +176,6 @@ const BoardContainer = (props) => {
         {boardContainers}
         {renderAddAnotherBoard()}
         <EditBoardModal
-          id={boardId}
           editBoardInput={editBoardInput}
           show={show}
           onChange={handleChange}
