@@ -6,8 +6,9 @@ Features: Add and delete columns, add and delete cards, move cards from one colu
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Demo:
-![Demo](https://user-images.githubusercontent.com/43526340/72229674-42636280-3565-11ea-9586-2ff88c347aeb.png)
-![demo2](https://user-images.githubusercontent.com/43526340/72229700-7b033c00-3565-11ea-859f-8c783a49c45e.png)
+![Kanban board](https://user-images.githubusercontent.com/43526340/92355536-4b2b1a80-f099-11ea-9078-cc27e1763d68.png)
+![RenameBoard](https://user-images.githubusercontent.com/43526340/92355551-52eabf00-f099-11ea-9018-a59bed3932ee.png)
+![Edit task](https://user-images.githubusercontent.com/43526340/92355556-554d1900-f099-11ea-87c5-e57853e96ec8.png)
 
 
 ## Available Scripts
