@@ -9,11 +9,7 @@
   overflow: hidden;
 }
 
-.darken-card {
+.gray-background {
   background: gray;
-  margin: 0.125rem;
-  padding: 1.5rem;
-  width: 12rem;
-  height: 10rem;
   opacity: 0.5;
 }

@@ -75,7 +75,7 @@ const BoardContainer = (props) => {
     } = draggedRef.current;
 
     if (boardIndex === currBoardIndex && cardIndex === currCardIndex) {
-      return "darken-card";
+      return "gray-background kanban-card";
     } else {
       return "kanban-card";
     }
