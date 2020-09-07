@@ -6,7 +6,7 @@ import CardContainer from "./CardContainer";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import RenameBoardModal from "./RenameBoardModal";
+import EditBoardModal from "./EditBoardModal";
 
 import "../styles/BoardContainer.css";
 
@@ -30,7 +30,7 @@ class BoardContainer extends PureComponent {
     editBoard: PropTypes.func.isRequired,
   };
 
-  state = { textInput: "", show: false };
+  state = { textInput: "", editBoardInput: "", boardId: "", show: false };
 
   handleAddBoard = () => {
     const { addBoard } = this.props;
@@ -42,6 +42,22 @@ class BoardContainer extends PureComponent {
     addBoard(boardName);
 
     this.setState({ textInput: "" });
+  };
+
+  handleChange = (event) => {
+    this.setState({ editBoardInput: event.target.value });
+  };
+
+  handleEditBoard = () => {
+    const { editBoard } = this.props;
+    const { boardId, editBoardInput } = this.state;
+
+    if (!editBoardInput) {
+      return;
+    }
+
+    editBoard(boardId, editBoardInput);
+    this.closeModal();
   };
 
   handleSubmit = (event) => {
@@ -74,13 +90,13 @@ class BoardContainer extends PureComponent {
   );
 
   renderContent = () => {
-    const { boards, deleteBoard, editBoard } = this.props;
+    const { boards, deleteBoard } = this.props;
 
-    const boardContainers = boards.map((board) => (
-      <Col md={2} className="board" key={board.id}>
+    const boardContainers = boards.map(({ cards, id, name }) => (
+      <Col md={2} className="board" key={id}>
         <Row className="board-header">
           <Col md={9}>
-            <p className="ellipsis-text">{board.name}</p>
+            <p className="ellipsis-text">{name}</p>
           </Col>
           <Col md={1}>
             <button
@@ -88,8 +104,8 @@ class BoardContainer extends PureComponent {
               onClick={() =>
                 this.setState({
                   show: true,
-                  editBoardId: board.id,
-                  editBoardName: board.name,
+                  boardId: id,
+                  editBoardInput: name,
                 })
               }
             >
@@ -97,7 +113,7 @@ class BoardContainer extends PureComponent {
             </button>
           </Col>
         </Row>
-        <CardContainer cards={board.cards} boardId={board.id} />
+        <CardContainer cards={cards} boardId={id} />
       </Col>
     ));
 
@@ -105,19 +121,17 @@ class BoardContainer extends PureComponent {
       <Row>
         {boardContainers}
         {this.renderAddAnotherBoard()}
-        <RenameBoardModal
-          name={this.state.editBoardName}
-          id={this.state.editBoardId}
+        <EditBoardModal
+          id={this.state.boardId}
+          editBoardInput={this.state.editBoardInput}
           show={this.state.show}
-          onHide={this.closeModal}
-          onSave={(id, newName) => {
-            editBoard(id, newName);
-            this.closeModal();
-          }}
+          onChange={this.handleChange}
           onDelete={() => {
-            deleteBoard(this.state.editBoardId);
+            deleteBoard(this.state.boardId);
             this.closeModal();
           }}
+          onHide={this.closeModal}
+          onSave={this.handleEditBoard}
         />
       </Row>
     );

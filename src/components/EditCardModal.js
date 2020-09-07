@@ -6,23 +6,27 @@ import Form from "react-bootstrap/Form";
 
 class EditBoardModal extends PureComponent {
   static propTypes = {
-    id: PropTypes.string.isRequired,
-    editBoardInput: PropTypes.string.isRequired,
+    cardId: PropTypes.string.isRequired,
+    editCardNameInput: PropTypes.string,
+    editCardDueDateInput: PropTypes.string,
     show: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
+    onDueDateChange: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
+    onNameChange: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
   };
 
   render() {
     const {
-      id,
-      editBoardInput,
+      cardId,
+      editCardNameInput,
+      editCardDueDateInput,
       show,
-      onChange,
       onDelete,
+      onDueDateChange,
       onHide,
+      onNameChange,
       onSave,
     } = this.props;
 
@@ -56,13 +60,21 @@ class EditBoardModal extends PureComponent {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(event) => event.preventDefault()}>
-            <Form.Group controlId={id}>
-              <Form.Label>Rename board</Form.Label>
+            <Form.Group controlId={cardId}>
+              <Form.Label>Edit task</Form.Label>
               <Form.Control
-                isInvalid={!editBoardInput}
                 type="text"
-                value={editBoardInput}
-                onChange={onChange}
+                isInvalid={!editCardNameInput}
+                onChange={onNameChange}
+                value={editCardNameInput}
+              />
+            </Form.Group>
+            <Form.Group controlId={cardId}>
+              <Form.Label>Due Date</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={onDueDateChange}
+                value={editCardDueDateInput}
               />
             </Form.Group>
           </Form>

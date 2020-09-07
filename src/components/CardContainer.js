@@ -1,92 +1,152 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addCard, deleteCard } from "../actions";
-import Card from "../components/Card";
+import { addCard, deleteCard, editCard } from "../actions";
+import Card from "react-bootstrap/Card";
+import EditCardModal from "../components/EditCardModal";
 
 import "../styles/CardContainer.css";
+import "../styles/BoardContainer.css";
+
+const KanbanCard = ({ text, onClick }) => (
+  <Card draggable={true} onDragStart={}>
+    <button className="custom-button" onClick={onClick}>
+      <Card.Body>
+        <Card.Text>{text}</Card.Text>
+      </Card.Body>
+    </button>
+  </Card>
+);
 
 class CardContainer extends PureComponent {
-  state = { [this.props.boardId]: "" };
-
   static propTypes = {
     cards: PropTypes.arrayOf(
       PropTypes.shape({
+        boardId: PropTypes.string,
+        cardDueDate: PropTypes.string,
         cardId: PropTypes.string,
         cardName: PropTypes.string,
-        boardId: PropTypes.string,
       })
     ).isRequired,
     boardId: PropTypes.string.isRequired,
+    addCard: PropTypes.func.isRequired,
+    deleteCard: PropTypes.func.isRequired,
+    editCard: PropTypes.func.isRequired,
   };
 
-  handleAddCard = (cardName) => {
+  state = {
+    show: false,
+    cardId: "",
+    editCardNameInput: "",
+    editCardDueDateInput: "",
+    addNewCardMode: false,
+  };
+
+  handleAddCard = () => {
     const { addCard, boardId } = this.props;
-    addCard(cardName, boardId);
-  };
+    const { cardId, editCardNameInput, editCardDueDateInput } = this.state;
 
-  handleDeleteCard = (cardId, boardId) => {
-    this.props.deleteCard(cardId, boardId);
-  };
-
-  handleChange = (event) =>
-    this.setState({ [event.target.name]: event.target.value });
-
-  handleKeyDown = (event) => {
-    const { boardId } = this.props;
-
-    if (event.key === "Enter") {
-      const cardName = this.state[boardId].trim();
-
-      if (!cardName) return;
-
-      this.handleAddCard(cardName);
-
-      this.setState({ [boardId]: "" });
+    if (!editCardNameInput) {
+      return;
     }
+
+    addCard(
+      {
+        cardId,
+        cardName: editCardNameInput,
+        cardDueDate: editCardDueDateInput,
+      },
+      boardId
+    );
+
+    this.closeModal();
   };
 
-  handleDrop = (event) => {
-    const cardId = event.dataTransfer.getData("cardId");
-    const cardName = event.dataTransfer.getData("cardName");
+  handleNameChange = (event) => {
+    this.setState({ editCardNameInput: event.target.value });
+  };
 
-    const sourceBoardId = event.dataTransfer.getData("boardId");
-    if (sourceBoardId === this.props.boardId) return;
+  handleDueDateChange = (event) => {
+    this.setState({ editCardDueDateInput: event.target.value });
+  };
 
-    this.handleAddCard(cardName);
+  handleDeleteCard = () => {
+    const { boardId, deleteCard } = this.props;
 
-    this.handleDeleteCard(cardId, sourceBoardId);
+    deleteCard(this.state.cardId, boardId);
 
-    event.dataTransfer.clearData();
+    this.closeModal();
+  };
+
+  handleEditCard = () => {
+    const { boardId, editCard } = this.props;
+    const { cardId, editCardNameInput, editCardDueDateInput } = this.state;
+
+    if (!editCardNameInput) {
+      return;
+    }
+
+    editCard(
+      {
+        cardId,
+        cardName: editCardNameInput,
+        cardDueDate: editCardDueDateInput,
+      },
+      boardId
+    );
+
+    this.closeModal();
+  };
+
+  closeModal = () => {
+    this.setState({ show: false });
   };
 
   render() {
-    const { cards, boardId } = this.props;
-
-    const renderCards = cards.map((card) => (
-      <Card
-        {...card}
-        key={card.cardId}
-        boardId={boardId}
-        addCard={(cardName) => this.handleAddCard(cardName)}
-        deleteCard={(id) => this.handleDeleteCard(id, boardId)}
-      />
-    ));
+    const { cards } = this.props;
 
     return (
-      <div className="card-container" onDrop={this.handleDrop}>
-        <div className="cards" onDragOver={(event) => event.preventDefault()}>
-          {renderCards}
-          <input
-            className="card"
-            key={boardId}
-            placeholder="Add card"
-            name={boardId}
-            value={this.state[boardId]}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
+      <div className="card-container">
+        <div className="cards">
+          {cards.map(({ cardId, cardName, cardDueDate }) => (
+            <KanbanCard
+              key={cardId}
+              text={cardName}
+              onClick={() =>
+                this.setState({
+                  show: true,
+                  cardId: cardId,
+                  editCardNameInput: cardName,
+                  editCardDueDateInput: cardDueDate,
+                  addNewCardMode: false,
+                })
+              }
+            />
+          ))}
+          <KanbanCard
+            text="Add new card"
+            onClick={() =>
+              this.setState({
+                show: true,
+                cardId: "",
+                editCardNameInput: "",
+                editCardDueDateInput: "",
+                addNewCardMode: true,
+              })
+            }
           />
         </div>
+
+        <EditCardModal
+          {...this.state}
+          onDueDateChange={this.handleDueDateChange}
+          onNameChange={this.handleNameChange}
+          onDelete={this.handleDeleteCard}
+          onHide={this.closeModal}
+          onSave={
+            this.state.addNewCardMode ? this.handleAddCard : this.handleEditCard
+          }
+        />
       </div>
     );
   }
@@ -95,6 +155,7 @@ class CardContainer extends PureComponent {
 const mapDispatchToProps = {
   addCard,
   deleteCard,
+  editCard,
 };
 
 export default connect(null, mapDispatchToProps)(CardContainer);

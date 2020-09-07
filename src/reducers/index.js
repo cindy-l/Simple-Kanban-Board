@@ -1,6 +1,7 @@
 import {
   ADD_CARD,
   DELETE_CARD,
+  EDIT_CARD,
   ADD_BOARD,
   DELETE_BOARD,
   EDIT_BOARD,
@@ -9,7 +10,7 @@ import {
 const reducer = (state, action) => {
   switch (action.type) {
     case ADD_CARD: {
-      const { cardName, cardId, boardId } = action.payload;
+      const { card, boardId } = action.payload;
 
       return state.map((board) => {
         if (board.id !== boardId) {
@@ -17,7 +18,7 @@ const reducer = (state, action) => {
         }
         return {
           ...board,
-          cards: [...board.cards, { cardName, cardId, boardId }],
+          cards: [...board.cards, { ...card, boardId }],
         };
       });
     }
@@ -32,6 +33,26 @@ const reducer = (state, action) => {
         return {
           ...board,
           cards: board.cards.filter((card) => card.cardId !== cardId),
+        };
+      });
+    }
+
+    case EDIT_CARD: {
+      const { card: newCard, boardId } = action.payload;
+      const { cardId } = newCard;
+
+      return state.map((board) => {
+        if (board.id !== boardId) {
+          return board;
+        }
+        return {
+          ...board,
+          cards: board.cards.map((card) => {
+            if (card.cardId !== cardId) {
+              return card;
+            }
+            return { ...newCard };
+          }),
         };
       });
     }
@@ -51,14 +72,15 @@ const reducer = (state, action) => {
     case EDIT_BOARD: {
       const { boardId, newName } = action.payload;
 
-      const index = state.findIndex((board) => board.id === boardId);
-      const board = state[index];
-
-      return [
-        ...state.slice(0, index),
-        { ...board, name: newName },
-        ...state.slice(index + 1),
-      ];
+      return state.map((board) => {
+        if (board.id !== boardId) {
+          return board;
+        }
+        return {
+          ...board,
+          name: newName,
+        };
+      });
     }
 
     default:

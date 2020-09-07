@@ -1,14 +1,12 @@
-header {
-  font-size: 3rem;
-  text-align: center;
-}
-
-body {
+.home {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-footer {
-  margin-top: auto;
+.welcome-text {
+  padding: 5rem;
+  font-size: 5rem;
 }

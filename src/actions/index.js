@@ -2,18 +2,25 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ADD_CARD = "ADD_CARD";
 export const DELETE_CARD = "DELETE_CARD";
+export const EDIT_CARD = "EDIT_CARD";
+
 export const ADD_BOARD = "ADD_BOARD";
 export const DELETE_BOARD = "DELETE_BOARD";
 export const EDIT_BOARD = "EDIT_BOARD";
 
-export const addCard = (cardName, boardId) => ({
+export const addCard = (card, boardId) => ({
   type: ADD_CARD,
-  payload: { cardName, cardId: uuidv4(), boardId },
+  payload: { card: { ...card, cardId: uuidv4() }, boardId },
 });
 
 export const deleteCard = (cardId, boardId) => ({
   type: DELETE_CARD,
   payload: { cardId, boardId },
+});
+
+export const editCard = (card, boardId) => ({
+  type: EDIT_CARD,
+  payload: { card, boardId },
 });
 
 export const addBoard = (boardName) => ({
