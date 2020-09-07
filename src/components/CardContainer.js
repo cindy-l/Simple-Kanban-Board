@@ -2,21 +2,11 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addCard, deleteCard, editCard } from "../actions";
-import Card from "react-bootstrap/Card";
-import EditCardModal from "../components/EditCardModal";
+import KanbanCard from "./KanbanCard";
+import EditCardModal from "./EditCardModal";
 
 import "../styles/CardContainer.css";
 import "../styles/BoardContainer.css";
-
-const KanbanCard = ({ text, onClick }) => (
-  <Card draggable={true} onDragStart={}>
-    <button className="custom-button" onClick={onClick}>
-      <Card.Body>
-        <Card.Text>{text}</Card.Text>
-      </Card.Body>
-    </button>
-  </Card>
-);
 
 class CardContainer extends PureComponent {
   static propTypes = {
@@ -103,39 +93,68 @@ class CardContainer extends PureComponent {
   };
 
   render() {
-    const { cards } = this.props;
+    const {
+      cards,
+      boardIndex,
+      getClassName,
+      handleDragEnter,
+      handleDragStart,
+      handleDrop,
+      isDragging,
+    } = this.props;
 
     return (
       <div className="card-container">
-        <div className="cards">
-          {cards.map(({ cardId, cardName, cardDueDate }) => (
-            <KanbanCard
-              key={cardId}
-              text={cardName}
-              onClick={() =>
-                this.setState({
-                  show: true,
-                  cardId: cardId,
-                  editCardNameInput: cardName,
-                  editCardDueDateInput: cardDueDate,
-                  addNewCardMode: false,
-                })
-              }
-            />
-          ))}
+        {cards.map(({ cardId, cardName, cardDueDate }, index) => (
           <KanbanCard
-            text="Add new card"
-            onClick={() =>
+            className={
+              isDragging ? getClassName(boardIndex, index) : "kanban-card"
+            }
+            key={cardId}
+            text={cardName}
+            handleDragStart={(event) =>
+              handleDragStart(event, boardIndex, index)
+            }
+            handleDragEnter={
+              isDragging
+                ? (event) => handleDragEnter(event, boardIndex, index)
+                : null
+            }
+            handleDrop={handleDrop}
+            handleClick={() =>
               this.setState({
                 show: true,
-                cardId: "",
-                editCardNameInput: "",
-                editCardDueDateInput: "",
-                addNewCardMode: true,
+                cardId: cardId,
+                editCardNameInput: cardName,
+                editCardDueDateInput: cardDueDate,
+                addNewCardMode: false,
               })
             }
           />
-        </div>
+        ))}
+        <KanbanCard
+          text="Add new card"
+          className="kanban-card"
+          handleDragEnter={
+            isDragging
+              ? (event) => {
+                  cards.length === 0
+                    ? handleDragEnter(event, boardIndex, 0)
+                    : handleDragEnter(event, boardIndex, cards.length);
+                }
+              : null
+          }
+          handleDrop={handleDrop}
+          handleClick={() =>
+            this.setState({
+              show: true,
+              cardId: "",
+              editCardNameInput: "",
+              editCardDueDateInput: "",
+              addNewCardMode: true,
+            })
+          }
+        />
 
         <EditCardModal
           {...this.state}

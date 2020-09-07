@@ -29,7 +29,7 @@ class EditBoardModal extends PureComponent {
     return (
       <Modal show={show} onHide={onHide}>
         <Modal.Header>
-          <Col md={9}>
+          <Col xs={7} md={7}>
             <button
               className="mdc-icon-button material-icons custom-button"
               onClick={onHide}
@@ -37,7 +37,7 @@ class EditBoardModal extends PureComponent {
               arrow_back_ios
             </button>
           </Col>
-          <Col md={1}>
+          <Col xs={2} md={1}>
             <button
               className="mdc-icon-button material-icons custom-button"
               onClick={onSave}
@@ -45,7 +45,7 @@ class EditBoardModal extends PureComponent {
               done
             </button>
           </Col>
-          <Col md={1}>
+          <Col xs={2} md={2}>
             <button
               className="mdc-icon-button material-icons custom-button"
               onClick={onDelete}

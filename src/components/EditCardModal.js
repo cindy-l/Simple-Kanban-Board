@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 
-class EditBoardModal extends PureComponent {
+class EditCardModal extends PureComponent {
   static propTypes = {
     cardId: PropTypes.string.isRequired,
     editCardNameInput: PropTypes.string,
@@ -84,4 +84,4 @@ class EditBoardModal extends PureComponent {
   }
 }
 
-export default EditBoardModal;
+export default EditCardModal;

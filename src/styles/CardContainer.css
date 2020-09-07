@@ -1,13 +1,19 @@
-.card-container {
-  text-align: center;
-  overflow-wrap: break-word;
+.kanban-card {
+  background: white;
+  border: 2px solid #2471a3;
+  margin: 0.125rem;
+  padding: 1.5rem;
+  width: 12rem;
+  height: 10rem;
+  line-height: 1.5rem;
+  overflow: hidden;
 }
 
-.card {
-  border: 2px solid#2471A3;
-  margin: 1rem;
-  padding: 0.5rem;
-  width: 190px;
-  background: white;
-  overflow: hidden;
+.darken-card {
+  background: gray;
+  margin: 0.125rem;
+  padding: 1.5rem;
+  width: 12rem;
+  height: 10rem;
+  opacity: 0.5;
 }

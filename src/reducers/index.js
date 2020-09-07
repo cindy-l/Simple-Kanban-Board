@@ -4,6 +4,7 @@ import {
   EDIT_CARD,
   ADD_BOARD,
   DELETE_BOARD,
+  DRAG_AND_DROP_CARD,
   EDIT_BOARD,
 } from "../actions";
 
@@ -12,74 +13,98 @@ const reducer = (state, action) => {
     case ADD_CARD: {
       const { card, boardId } = action.payload;
 
-      return state.map((board) => {
-        if (board.id !== boardId) {
-          return board;
-        }
-        return {
-          ...board,
-          cards: [...board.cards, { ...card, boardId }],
-        };
-      });
+      const newState = JSON.parse(JSON.stringify(state));
+
+      const targetBoard = newState.find((board) => board.id === boardId);
+
+      if (targetBoard) {
+        targetBoard.cards.push({ ...card, boardId });
+      }
+
+      return newState;
     }
 
     case DELETE_CARD: {
       const { cardId, boardId } = action.payload;
 
-      return state.map((board) => {
-        if (board.id !== boardId) {
-          return board;
-        }
-        return {
-          ...board,
-          cards: board.cards.filter((card) => card.cardId !== cardId),
-        };
-      });
+      const newState = JSON.parse(JSON.stringify(state));
+
+      const targetBoard = newState.find((board) => board.id === boardId);
+
+      if (targetBoard) {
+        targetBoard.cards = targetBoard.cards.filter(
+          (card) => card.cardId !== cardId
+        );
+      }
+
+      return newState;
+    }
+
+    case DRAG_AND_DROP_CARD: {
+      const {
+        boardIndex,
+        cardIndex,
+        targetBoardIndex,
+        targetCardIndex,
+      } = action.payload;
+
+      const newState = JSON.parse(JSON.stringify(state));
+
+      newState[targetBoardIndex].cards.splice(
+        targetCardIndex,
+        0,
+        newState[boardIndex].cards.splice(cardIndex, 1)[0]
+      );
+
+      return newState;
     }
 
     case EDIT_CARD: {
       const { card: newCard, boardId } = action.payload;
       const { cardId } = newCard;
 
-      return state.map((board) => {
-        if (board.id !== boardId) {
-          return board;
-        }
-        return {
-          ...board,
-          cards: board.cards.map((card) => {
-            if (card.cardId !== cardId) {
-              return card;
-            }
-            return { ...newCard };
-          }),
-        };
-      });
+      const newState = JSON.parse(JSON.stringify(state));
+
+      const targetBoard = newState.find((board) => board.id === boardId);
+
+      if (!targetBoard) {
+        targetBoard.cards.map((card) => {
+          if (card.cardId !== cardId) {
+            return card;
+          }
+          return { ...newCard };
+        });
+      }
+
+      return newState;
     }
 
     case ADD_BOARD: {
       const { boardId, boardName } = action.payload;
 
-      return [...state, { id: boardId, name: boardName, cards: [] }];
+      const newState = JSON.parse(JSON.stringify(state));
+
+      return [...newState, { id: boardId, name: boardName, cards: [] }];
     }
 
     case DELETE_BOARD: {
       const { boardId } = action.payload;
 
-      return state.filter((board) => board.id !== boardId);
+      const newState = JSON.parse(JSON.stringify(state));
+
+      return newState.filter((board) => board.id !== boardId);
     }
 
     case EDIT_BOARD: {
       const { boardId, newName } = action.payload;
 
-      return state.map((board) => {
+      const newState = JSON.parse(JSON.stringify(state));
+
+      return newState.map((board) => {
         if (board.id !== boardId) {
           return board;
         }
-        return {
-          ...board,
-          name: newName,
-        };
+        return { ...board, name: newName };
       });
     }
 

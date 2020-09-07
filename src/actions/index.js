@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ADD_CARD = "ADD_CARD";
 export const DELETE_CARD = "DELETE_CARD";
+export const DRAG_AND_DROP_CARD = " DRAG_AND_DROP_CARD";
 export const EDIT_CARD = "EDIT_CARD";
 
 export const ADD_BOARD = "ADD_BOARD";
@@ -16,6 +17,16 @@ export const addCard = (card, boardId) => ({
 export const deleteCard = (cardId, boardId) => ({
   type: DELETE_CARD,
   payload: { cardId, boardId },
+});
+
+export const dragAndDropCard = (
+  boardIndex,
+  cardIndex,
+  targetBoardIndex,
+  targetCardIndex
+) => ({
+  type: DRAG_AND_DROP_CARD,
+  payload: { boardIndex, cardIndex, targetBoardIndex, targetCardIndex },
 });
 
 export const editCard = (card, boardId) => ({

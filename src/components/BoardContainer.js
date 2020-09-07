@@ -1,7 +1,8 @@
-import React, { PureComponent } from "react";
+import React from "react";
+import { useState, useRef } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addBoard, deleteBoard, editBoard } from "../actions";
+import { addBoard, deleteBoard, dragAndDropCard, editBoard } from "../actions";
 import CardContainer from "./CardContainer";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -10,144 +11,216 @@ import EditBoardModal from "./EditBoardModal";
 
 import "../styles/BoardContainer.css";
 
-class BoardContainer extends PureComponent {
-  static propTypes = {
-    boards: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string,
-        cards: PropTypes.arrayOf(
-          PropTypes.shape({
-            cardId: PropTypes.string,
-            cardName: PropTypes.string,
-            boardId: PropTypes.string,
-          })
-        ),
-      })
-    ).isRequired,
-    addBoard: PropTypes.func.isRequired,
-    deleteBoard: PropTypes.func.isRequired,
-    editBoard: PropTypes.func.isRequired,
+const BoardContainer = (props) => {
+  const [newBoardInput, setInput] = useState("");
+  const [editBoardInput, setEditBoardInput] = useState("");
+  const [boardId, setBoardId] = useState("");
+  const [show, setShow] = useState(false);
+
+  const draggedRef = useRef();
+  const draggedNode = useRef();
+  const dropTargetRef = useRef();
+  const [isDragging, setDragging] = useState(false);
+
+  const handleDragStart = (event, boardIndex, cardIndex) => {
+    draggedRef.current = { boardIndex, cardIndex };
+    draggedNode.current = event.target;
+    draggedNode.current.addEventListener("dragend", handleDragEnd);
+    setTimeout(() => setDragging(true), 0);
   };
 
-  state = { textInput: "", editBoardInput: "", boardId: "", show: false };
+  const handleDragEnd = () => {
+    draggedNode.current.removeEventListener("dragend", handleDragEnd);
+    draggedRef.current = null;
+    draggedNode.current = null;
+    dropTargetRef.current = null;
+    setDragging(false);
+  };
 
-  handleAddBoard = () => {
-    const { addBoard } = this.props;
+  const handleDragEnter = (event, boardIndex, cardIndex) => {
+    if (event.target !== draggedNode.current) {
+      dropTargetRef.current = { boardIndex, cardIndex };
+    }
+  };
 
-    const boardName = this.state.textInput.trim();
+  const handleDrop = (event) => {
+    event.preventDefault();
+
+    if (!draggedRef.current) {
+      return;
+    }
+
+    const {
+      boardIndex: currBoardIndex,
+      cardIndex: currCardIndex,
+    } = draggedRef.current;
+
+    const {
+      boardIndex: targetBoardIndex,
+      cardIndex: targetCardIndex,
+    } = dropTargetRef.current;
+
+    props.dragAndDropCard(
+      currBoardIndex,
+      currCardIndex,
+      targetBoardIndex,
+      targetCardIndex
+    );
+  };
+
+  const getClassName = (boardIndex, cardIndex) => {
+    const {
+      boardIndex: currBoardIndex,
+      cardIndex: currCardIndex,
+    } = draggedRef.current;
+
+    if (boardIndex === currBoardIndex && cardIndex === currCardIndex) {
+      return "darken-card";
+    } else {
+      return "kanban-card";
+    }
+  };
+
+  const handleAddBoard = () => {
+    const { addBoard } = props;
+
+    const boardName = newBoardInput.trim();
 
     if (!boardName) return;
 
     addBoard(boardName);
 
-    this.setState({ textInput: "" });
+    setInput("");
   };
 
-  handleChange = (event) => {
-    this.setState({ editBoardInput: event.target.value });
+  const handleChange = (event) => {
+    setEditBoardInput(event.target.value);
   };
 
-  handleEditBoard = () => {
-    const { editBoard } = this.props;
-    const { boardId, editBoardInput } = this.state;
+  const handleEditBoard = () => {
+    const { editBoard } = props;
 
     if (!editBoardInput) {
       return;
     }
 
     editBoard(boardId, editBoardInput);
-    this.closeModal();
+
+    closeModal();
   };
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    this.handleAddBoard();
+    handleAddBoard();
   };
 
-  closeModal = () => {
-    this.setState({ show: false });
+  const closeModal = () => {
+    setShow(false);
   };
 
-  renderAddAnotherBoard = () => (
-    <Col md={2} className="board">
+  const renderAddAnotherBoard = () => (
+    <div className="board">
       <Row className="board-header">
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label className="board-name">Add new board</Form.Label>
             <Form.Control
               type="text"
               placeholder="Add new board"
-              onChange={(event) =>
-                this.setState({ textInput: event.target.value })
-              }
-              value={this.state.textInput}
+              onChange={(event) => setInput(event.target.value)}
+              value={newBoardInput}
             />
           </Form.Group>
         </Form>
       </Row>
-    </Col>
+    </div>
   );
 
-  renderContent = () => {
-    const { boards, deleteBoard } = this.props;
+  const renderContent = () => {
+    const { boards, deleteBoard } = props;
 
-    const boardContainers = boards.map(({ cards, id, name }) => (
-      <Col md={2} className="board" key={id}>
+    const boardContainers = boards.map(({ cards, id, name }, index) => (
+      <div className="board" key={id}>
         <Row className="board-header">
-          <Col md={9}>
+          <Col xs={8} md={8}>
             <p className="ellipsis-text">{name}</p>
           </Col>
-          <Col md={1}>
+          <Col>
             <button
               className="mdc-icon-button material-icons custom-button"
-              onClick={() =>
-                this.setState({
-                  show: true,
-                  boardId: id,
-                  editBoardInput: name,
-                })
-              }
+              onClick={() => {
+                setShow(true);
+                setBoardId(id);
+                setEditBoardInput(name);
+              }}
             >
               edit
             </button>
           </Col>
         </Row>
-        <CardContainer cards={cards} boardId={id} />
-      </Col>
+        <CardContainer
+          cards={cards}
+          boardId={id}
+          boardIndex={index}
+          isDragging={isDragging}
+          handleDragEnter={handleDragEnter}
+          handleDragStart={handleDragStart}
+          handleDrop={handleDrop}
+          getClassName={getClassName}
+        />
+      </div>
     ));
 
     return (
-      <Row>
+      <>
         {boardContainers}
-        {this.renderAddAnotherBoard()}
+        {renderAddAnotherBoard()}
         <EditBoardModal
-          id={this.state.boardId}
-          editBoardInput={this.state.editBoardInput}
-          show={this.state.show}
-          onChange={this.handleChange}
+          id={boardId}
+          editBoardInput={editBoardInput}
+          show={show}
+          onChange={handleChange}
           onDelete={() => {
-            deleteBoard(this.state.boardId);
-            this.closeModal();
+            deleteBoard(boardId);
+            closeModal();
           }}
-          onHide={this.closeModal}
-          onSave={this.handleEditBoard}
+          onHide={closeModal}
+          onSave={handleEditBoard}
         />
-      </Row>
+      </>
     );
   };
 
-  render() {
-    return <div className="board-content">{this.renderContent()}</div>;
-  }
-}
+  return <div className="board-content">{renderContent()}</div>;
+};
 
 const mapDispatchToProps = {
   addBoard,
   deleteBoard,
+  dragAndDropCard,
   editBoard,
 };
 
 const mapStateToProps = (state) => ({ boards: state });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardContainer);
+
+BoardContainer.propTypes = {
+  boards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      cards: PropTypes.arrayOf(
+        PropTypes.shape({
+          cardId: PropTypes.string,
+          cardName: PropTypes.string,
+          boardId: PropTypes.string,
+        })
+      ),
+    })
+  ).isRequired,
+  addBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired,
+  dragAndDropCard: PropTypes.func.isRequired,
+  editBoard: PropTypes.func.isRequired,
+};
