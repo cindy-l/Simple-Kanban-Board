@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from "redux";
 import reducer from "./reducers";
 import { loadState, saveState } from "./localStorage";
 import { v4 as uuidv4 } from "uuid";
-import throttle from "lodash/throttle";
+import throttle from "lodash.throttle";
 import { createLogger } from "redux-logger";
 
 const configureStore = () => {

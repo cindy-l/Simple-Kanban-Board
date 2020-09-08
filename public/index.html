@@ -19,21 +19,35 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <!-- Google fonts, material icons, react bootstrap-->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- 
+      Load Google fonts asynchronously 
+      Ref: https://stackoverflow.com/questions/32759272/how-to-load-css-asynchronously
+      Set media type to an invalid value so that the browser will load the stylesheet asynchronously 
+      On load, change the media type to a valid value so that the stylesheet is applied
+    -->
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
 
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      onload="this.rel = 'stylesheet'"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
       rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin
     />
 
     <title>Simple Kanban Board</title>
@@ -51,6 +65,8 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- React bootstrap scripts-->
     <script
       src="https://unpkg.com/react/umd/react.production.min.js"
       crossorigin
