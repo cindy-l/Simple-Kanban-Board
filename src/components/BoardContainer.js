@@ -98,13 +98,17 @@ const BoardContainer = (props) => {
   };
 
   const handleEditBoard = () => {
-    const { editBoard } = props;
+    const { boards, editBoard } = props;
 
     if (!editBoardInput) {
       return;
     }
 
-    editBoard(boardId, editBoardInput);
+    const editedBoard = boards.find((board) => board.id === boardId);
+
+    if (editedBoard && editedBoard.name !== editBoardInput) {
+      editBoard(boardId, editBoardInput);
+    }
 
     closeModal();
   };

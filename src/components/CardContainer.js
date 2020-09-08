@@ -69,21 +69,28 @@ class CardContainer extends PureComponent {
   };
 
   handleEditCard = () => {
-    const { boardId, editCard } = this.props;
+    const { boardId, cards, editCard } = this.props;
     const { cardId, editCardNameInput, editCardDueDateInput } = this.state;
 
     if (!editCardNameInput) {
       return;
     }
 
-    editCard(
-      {
-        cardId,
-        cardName: editCardNameInput,
-        cardDueDate: editCardDueDateInput,
-      },
-      boardId
-    );
+    const editedCard = cards.find((card) => card.cardId === cardId);
+    if (
+      editedCard &&
+      (editedCard.cardName !== editCardNameInput ||
+        editedCard.cardDueDate !== editCardDueDateInput)
+    ) {
+      editCard(
+        {
+          cardId,
+          cardName: editCardNameInput,
+          cardDueDate: editCardDueDateInput,
+        },
+        boardId
+      );
+    }
 
     this.closeModal();
   };
