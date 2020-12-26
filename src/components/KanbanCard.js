@@ -12,13 +12,13 @@ const KanbanCard = ({
   ...props
 }) => (
   <button
+    {...props}
     draggable="true"
     onClick={handleClick}
     onDragEnter={handleDragEnter}
     onDragOver={(event) => event.preventDefault()}
     onDragStart={handleDragStart}
     onDrop={handleDrop}
-    {...props}
   >
     {text}
   </button>
