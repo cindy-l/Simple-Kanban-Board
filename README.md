@@ -1,8 +1,13 @@
 # Simple Kanban Board
 
-A simple kanban board implemented with React + Redux.
+A simple kanban board implemented with React + Redux. Hosted on Heroku.
+https://simplekanbanboard.herokuapp.com/
 
-Features: Add and delete columns, add and delete cards, move cards from one column to another.
+Features:
+
+- Add, edit and delete columns
+- Add, edit and delete cards
+- Move cards from one column to another
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -10,14 +15,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ![Home](https://user-images.githubusercontent.com/43526340/92440190-f81c9a80-f160-11ea-8df8-dbf2ecc3da83.png)
 ![Kanban board](https://user-images.githubusercontent.com/43526340/92439741-3c5b6b00-f160-11ea-84fa-8cb6b20f2a98.png)
-![Rename board](https://user-images.githubusercontent.com/43526340/92439756-42e9e280-f160-11ea-9fb1-2fac134350c3.png)
-![Edit task](https://user-images.githubusercontent.com/43526340/92439766-454c3c80-f160-11ea-9f3b-08691c8ae78b.png)
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+1. Install dependencies
 
-### `npm start`
+   ```bash
+   npm install
+   ```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. Runs the app in the development mode. Open http://localhost:3000 to view it in the browser.
+
+   ```bash
+   npm run dev
+   ```
