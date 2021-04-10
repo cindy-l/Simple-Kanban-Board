@@ -2,6 +2,7 @@
 [Website](https://simplekanbanboard.herokuapp.com/)
 
 A simple kanban board implemented with React + Redux. Hosted on Heroku.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Table of Contents
@@ -17,7 +18,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
    npm install
    ```
 
-2. Runs the app in the development mode. Open http://localhost:3000 to view it in the browser.
+2. Runs the app in development mode. Open http://localhost:3000 to view it in the browser.
 
    ```bash
    npm run dev
